@@ -21,9 +21,14 @@ let paused = false; // Flag to track if the game is paused
 let isMouseDown = false; // To track if mouse is clicked
 let mouseX = 0; // To track mouse position
 
-// Load the custom image for the ball
+// Load the custom images
 const ballImage = new Image();
-ballImage.src = "cat.png"; // Use your image file name here
+ballImage.src = "cat.png"; // Use your original image file here
+
+const cryImage = new Image();
+cryImage.src = "catCry.png"; // Use the crying image file here
+
+let currentBallImage = ballImage; // Track the current image to display
 
 // Set canvas dimensions to fit the screen
 function resizeCanvas() {
@@ -39,7 +44,7 @@ canvas.addEventListener("mousedown", mouseDownHandler, false);
 canvas.addEventListener("mousemove", mouseMoveHandler, false);
 canvas.addEventListener("mouseup", mouseUpHandler, false);
 
-// Event listeners for keyboard controls (if you want to keep them)
+// Event listeners for keyboard controls
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
@@ -66,7 +71,7 @@ function mouseUpHandler() {
     isMouseDown = false;
 }
 
-// Handle touch events for mobile controls (as you previously had)
+// Handle touch events for mobile controls
 canvas.addEventListener("touchstart", handleTouch, false);
 canvas.addEventListener("touchmove", handleTouch, false);
 
@@ -105,9 +110,9 @@ function togglePause() {
     }
 }
 
-// Draw the ball using the custom image, 2x bigger
+// Draw the ball using the current image
 function drawBall() {
-    ctx.drawImage(ballImage, x - ballRadius * 2, y - ballRadius * 2, ballRadius * 4, ballRadius * 4);
+    ctx.drawImage(currentBallImage, x - ballRadius * 2, y - ballRadius * 2, ballRadius * 4, ballRadius * 4);
 }
 
 // Draw the giant (paddle)
@@ -136,9 +141,20 @@ function draw() {
     // Ball collision with walls
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
         dx = -dx;
+        // Change to crying image for 0.2 seconds
+        currentBallImage = cryImage;
+        setTimeout(() => {
+            currentBallImage = ballImage;
+        }, 200);
     }
+
     if (y + dy < ballRadius) {
         dy = -dy;
+        // Change to crying image for 0.2 seconds
+        currentBallImage = cryImage;
+        setTimeout(() => {
+            currentBallImage = ballImage;
+        }, 200);
     } else if (y + dy > canvas.height - ballRadius) {
         if (x > giantX && x < giantX + giantWidth) {
             dy = -dy;

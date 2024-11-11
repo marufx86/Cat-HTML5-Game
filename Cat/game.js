@@ -17,6 +17,9 @@ let leftPressed = false;
 
 let gameOver = false; // Flag to track if the game is over
 
+let isMouseDown = false; // To track if mouse is clicked
+let mouseX = 0; // To track mouse position
+
 // Load the custom image for the ball
 const ballImage = new Image();
 ballImage.src = "cat.png"; // Use your image file name here
@@ -30,11 +33,36 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas(); // Call the function initially to set the size
 
-// Event listeners for keyboard controls
+// Event listeners for mouse controls
+canvas.addEventListener("mousedown", mouseDownHandler, false);
+canvas.addEventListener("mousemove", mouseMoveHandler, false);
+canvas.addEventListener("mouseup", mouseUpHandler, false);
+
+// Event listeners for keyboard controls (if you want to keep them)
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
-// Handle touch events
+function mouseDownHandler(e) {
+    if (e.button === 0) { // Left mouse button
+        isMouseDown = true;
+        mouseX = e.clientX - canvas.getBoundingClientRect().left;
+    }
+}
+
+function mouseMoveHandler(e) {
+    if (isMouseDown) {
+        mouseX = e.clientX - canvas.getBoundingClientRect().left;
+        if (mouseX > 0 && mouseX < canvas.width) {
+            giantX = mouseX - giantWidth / 2; // Move the paddle to the mouse position
+        }
+    }
+}
+
+function mouseUpHandler() {
+    isMouseDown = false;
+}
+
+// Handle touch events for mobile controls (as you previously had)
 canvas.addEventListener("touchstart", handleTouch, false);
 canvas.addEventListener("touchmove", handleTouch, false);
 
@@ -113,7 +141,7 @@ function draw() {
     x += dx;
     y += dy;
 
-    // Move giant (paddle)
+    // Move giant (paddle) - keyboard controls
     if (rightPressed && giantX < canvas.width - giantWidth) {
         giantX += 7;
     } else if (leftPressed && giantX > 0) {

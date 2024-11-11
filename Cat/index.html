@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giant & Rock DX-Ball Game</title>
+    <title>Kawaii Cat HTML5</title>
     <style>
         body {
             margin: 0;
@@ -14,6 +14,7 @@
             height: 100vh;
             background-color: #f0f0f0;
             font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            position: relative;
         }
 
         canvas {
@@ -32,21 +33,27 @@
             margin: 0;
         }
 
-        #pauseButton {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 15px;
-            background-color: #f44336;
+        #pauseButton, #retryButton {
+            padding: 15px 25px;
+            background-color: #ff6699;
             color: white;
             border: none;
             cursor: pointer;
             font-size: 18px;
-            border-radius: 5px;
+            border-radius: 10px;
+            display: inline-block;
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            transition: background-color 0.3s ease;
         }
 
-        #pauseButton:focus {
-            outline: none;
+        #pauseButton {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        #retryButton:hover, #pauseButton:hover {
+            background-color: #ff4081;
         }
 
         #gameOverMessage {
@@ -55,8 +62,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: #ffb3c6; /* pastel pink */
-            border: 3px solid #ff6699; /* darker pink border */
+            background-color: #ffb3c6;
+            border: 3px solid #ff6699;
             padding: 30px;
             border-radius: 15px;
             text-align: center;
@@ -64,21 +71,6 @@
             color: #333;
             font-weight: bold;
             font-family: 'Comic Sans MS', 'Arial', sans-serif;
-        }
-
-        #retryButton {
-            margin-top: 15px;
-            padding: 10px 20px;
-            font-size: 20px;
-            color: white;
-            background-color: #ff6699;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        #retryButton:hover {
-            background-color: #ff4081;
         }
     </style>
 </head>

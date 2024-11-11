@@ -3,6 +3,7 @@ const ctx = canvas.getContext("2d");
 const gameOverMessage = document.getElementById("gameOverMessage");
 const finalScoreElement = document.getElementById("finalScore");
 const retryButton = document.getElementById("retryButton");
+const pauseButton = document.getElementById("pauseButton");
 
 let score = 0;
 let ballRadius = 20;
@@ -24,7 +25,6 @@ let paused = false;
 let isMouseDown = false;
 let mouseX = 0;
 
-// Load the custom images
 const ballImage = new Image();
 ballImage.src = "cat.png";
 
@@ -47,7 +47,7 @@ canvas.addEventListener("mouseup", mouseUpHandler, false);
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-document.getElementById("pauseButton").addEventListener("click", togglePause, false);
+pauseButton.addEventListener("click", togglePause, false);
 
 retryButton.addEventListener("click", () => {
     document.location.reload();
@@ -102,7 +102,7 @@ function handleTouch(e) {
 
 function togglePause() {
     paused = !paused;
-    document.getElementById("pauseButton").textContent = paused ? "Resume" : "Pause";
+    pauseButton.textContent = paused ? "Resume" : "Pause";
     if (!paused) draw();
 }
 

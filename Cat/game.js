@@ -31,6 +31,9 @@ ballImage.src = "cat.png";
 const cryImage = new Image();
 cryImage.src = "catCry.png";
 
+const dieImage = new Image();
+dieImage.src = "dieCat.png";
+
 let currentBallImage = ballImage;
 
 function resizeCanvas() {
@@ -124,6 +127,7 @@ function updateScore() {
 
 function displayGameOver() {
     gameOver = true;
+    currentBallImage = dieImage;
     finalScoreElement.textContent = score;
     gameOverMessage.style.display = "block";
 }

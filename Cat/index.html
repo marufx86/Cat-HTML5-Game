@@ -13,6 +13,7 @@
             align-items: center;
             height: 100vh;
             background-color: #f0f0f0;
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
         }
 
         canvas {
@@ -47,12 +48,48 @@
         #pauseButton:focus {
             outline: none;
         }
+
+        #gameOverMessage {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffb3c6; /* pastel pink */
+            border: 3px solid #ff6699; /* darker pink border */
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 28px;
+            color: #333;
+            font-weight: bold;
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+        }
+
+        #retryButton {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 20px;
+            color: white;
+            background-color: #ff6699;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        #retryButton:hover {
+            background-color: #ff4081;
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
     <div id="gameStatus">Score: 0</div>
     <button id="pauseButton">Pause</button>
+    <div id="gameOverMessage">
+        <p>Game Over! Your score: <span id="finalScore">0</span></p>
+        <button id="retryButton">Try Again</button>
+    </div>
     <script src="game.js"></script>
 </body>
 </html>

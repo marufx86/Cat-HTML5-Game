@@ -1,8 +1,11 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const gameOverMessage = document.getElementById("gameOverMessage");
+const finalScoreElement = document.getElementById("finalScore");
+const retryButton = document.getElementById("retryButton");
 
 let score = 0;
-let ballRadius = 20; // Adjusted radius for better image scaling
+let ballRadius = 20;
 let x = canvas.width / 2;
 let y = canvas.height - 30;
 let dx = 2;
@@ -15,44 +18,43 @@ let giantX = (canvas.width - giantWidth) / 2;
 let rightPressed = false;
 let leftPressed = false;
 
-let gameOver = false; // Flag to track if the game is over
-let paused = false; // Flag to track if the game is paused
+let gameOver = false;
+let paused = false;
 
-let isMouseDown = false; // To track if mouse is clicked
-let mouseX = 0; // To track mouse position
+let isMouseDown = false;
+let mouseX = 0;
 
 // Load the custom images
 const ballImage = new Image();
-ballImage.src = "cat.png"; // Use your original image file here
+ballImage.src = "cat.png";
 
 const cryImage = new Image();
-cryImage.src = "catCry.png"; // Use the crying image file here
+cryImage.src = "catCry.png";
 
-let currentBallImage = ballImage; // Track the current image to display
+let currentBallImage = ballImage;
 
-// Set canvas dimensions to fit the screen
 function resizeCanvas() {
-    canvas.width = window.innerWidth * 0.9; // 90% of the screen width
-    canvas.height = window.innerHeight * 0.8; // 80% of the screen height
-    giantX = (canvas.width - giantWidth) / 2; // Recenter the paddle
+    canvas.width = window.innerWidth * 0.9;
+    canvas.height = window.innerHeight * 0.8;
+    giantX = (canvas.width - giantWidth) / 2;
 }
 window.addEventListener('resize', resizeCanvas);
-resizeCanvas(); // Call the function initially to set the size
+resizeCanvas();
 
-// Event listeners for mouse controls
 canvas.addEventListener("mousedown", mouseDownHandler, false);
 canvas.addEventListener("mousemove", mouseMoveHandler, false);
 canvas.addEventListener("mouseup", mouseUpHandler, false);
 
-// Event listeners for keyboard controls
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-
-// Event listener for the pause button
 document.getElementById("pauseButton").addEventListener("click", togglePause, false);
 
+retryButton.addEventListener("click", () => {
+    document.location.reload();
+});
+
 function mouseDownHandler(e) {
-    if (e.button === 0) { // Left mouse button
+    if (e.button === 0) {
         isMouseDown = true;
         mouseX = e.clientX - canvas.getBoundingClientRect().left;
     }
@@ -62,7 +64,7 @@ function mouseMoveHandler(e) {
     if (isMouseDown) {
         mouseX = e.clientX - canvas.getBoundingClientRect().left;
         if (mouseX > 0 && mouseX < canvas.width) {
-            giantX = mouseX - giantWidth / 2; // Move the paddle to the mouse position
+            giantX = mouseX - giantWidth / 2;
         }
     }
 }
@@ -71,7 +73,6 @@ function mouseUpHandler() {
     isMouseDown = false;
 }
 
-// Handle touch events for mobile controls
 canvas.addEventListener("touchstart", handleTouch, false);
 canvas.addEventListener("touchmove", handleTouch, false);
 
@@ -92,30 +93,23 @@ function keyUpHandler(e) {
 }
 
 function handleTouch(e) {
-    e.preventDefault(); // Prevent scrolling
+    e.preventDefault();
     const touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
     if (touchX > 0 && touchX < canvas.width) {
-        giantX = touchX - giantWidth / 2; // Move the paddle to the touch position
+        giantX = touchX - giantWidth / 2;
     }
 }
 
-// Toggle the pause state
 function togglePause() {
-    paused = !paused; // Toggle between paused and resumed
-    if (paused) {
-        document.getElementById("pauseButton").textContent = "Resume"; // Change button text to "Resume"
-    } else {
-        document.getElementById("pauseButton").textContent = "Pause"; // Change button text back to "Pause"
-        draw(); // Resume the game loop
-    }
+    paused = !paused;
+    document.getElementById("pauseButton").textContent = paused ? "Resume" : "Pause";
+    if (!paused) draw();
 }
 
-// Draw the ball using the current image
 function drawBall() {
     ctx.drawImage(currentBallImage, x - ballRadius * 2, y - ballRadius * 2, ballRadius * 4, ballRadius * 4);
 }
 
-// Draw the giant (paddle)
 function drawGiant() {
     ctx.beginPath();
     ctx.rect(giantX, canvas.height - giantHeight, giantWidth, giantHeight);
@@ -124,24 +118,26 @@ function drawGiant() {
     ctx.closePath();
 }
 
-// Update game status
 function updateScore() {
     document.getElementById("gameStatus").innerText = `Score: ${score}`;
 }
 
-// Main game loop
+function displayGameOver() {
+    gameOver = true;
+    finalScoreElement.textContent = score;
+    gameOverMessage.style.display = "block";
+}
+
 function draw() {
-    if (gameOver || paused) return; // Stop the game loop if the game is over or paused
+    if (gameOver || paused) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     drawBall();
     drawGiant();
 
-    // Ball collision with walls
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
         dx = -dx;
-        // Change to crying image for 0.2 seconds
         currentBallImage = cryImage;
         setTimeout(() => {
             currentBallImage = ballImage;
@@ -150,7 +146,6 @@ function draw() {
 
     if (y + dy < ballRadius) {
         dy = -dy;
-        // Change to crying image for 0.2 seconds
         currentBallImage = cryImage;
         setTimeout(() => {
             currentBallImage = ballImage;
@@ -161,18 +156,13 @@ function draw() {
             score++;
             updateScore();
         } else {
-            // Game over
-            gameOver = true;
-            alert("GAME OVER! Your score: " + score);
-            document.location.reload();
+            displayGameOver();
         }
     }
 
-    // Update ball position
     x += dx;
     y += dy;
 
-    // Move giant (paddle) - keyboard controls
     if (rightPressed && giantX < canvas.width - giantWidth) {
         giantX += 7;
     } else if (leftPressed && giantX > 0) {

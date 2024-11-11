@@ -16,6 +16,7 @@ let rightPressed = false;
 let leftPressed = false;
 
 let gameOver = false; // Flag to track if the game is over
+let paused = false; // Flag to track if the game is paused
 
 let isMouseDown = false; // To track if mouse is clicked
 let mouseX = 0; // To track mouse position
@@ -41,6 +42,9 @@ canvas.addEventListener("mouseup", mouseUpHandler, false);
 // Event listeners for keyboard controls (if you want to keep them)
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+
+// Event listener for the pause button
+document.getElementById("pauseButton").addEventListener("click", togglePause, false);
 
 function mouseDownHandler(e) {
     if (e.button === 0) { // Left mouse button
@@ -90,6 +94,17 @@ function handleTouch(e) {
     }
 }
 
+// Toggle the pause state
+function togglePause() {
+    paused = !paused; // Toggle between paused and resumed
+    if (paused) {
+        document.getElementById("pauseButton").textContent = "Resume"; // Change button text to "Resume"
+    } else {
+        document.getElementById("pauseButton").textContent = "Pause"; // Change button text back to "Pause"
+        draw(); // Resume the game loop
+    }
+}
+
 // Draw the ball using the custom image, 2x bigger
 function drawBall() {
     ctx.drawImage(ballImage, x - ballRadius * 2, y - ballRadius * 2, ballRadius * 4, ballRadius * 4);
@@ -111,7 +126,7 @@ function updateScore() {
 
 // Main game loop
 function draw() {
-    if (gameOver) return; // Stop the game loop if the game is over
+    if (gameOver || paused) return; // Stop the game loop if the game is over or paused
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 

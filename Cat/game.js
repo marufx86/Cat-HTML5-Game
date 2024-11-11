@@ -113,7 +113,7 @@ function drawBall() {
 function drawGiant() {
     ctx.beginPath();
     ctx.rect(giantX, canvas.height - giantHeight, giantWidth, giantHeight);
-    ctx.fillStyle = "green";
+    ctx.fillStyle = "#ff4081";
     ctx.fill();
     ctx.closePath();
 }

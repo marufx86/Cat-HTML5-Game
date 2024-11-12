@@ -48,6 +48,8 @@ function resetGameVariables() {
 function startGame() {
     introScreen.style.display = "none";
     canvas.style.display = "block";
+    gameStatus.style.display = "block";
+    pauseButton.style.display = "block";
     resetGameVariables();
     draw();
 }
@@ -62,6 +64,7 @@ function displayGameOver() {
 function restartGame() {
     gameOverMessage.style.display = "none";
     resetGameVariables();
+    updateScore();
     draw();
 }
 
@@ -198,3 +201,7 @@ function draw() {
 newGameButton.addEventListener("click", startGame);
 difficultyButton.addEventListener("click", () => alert("Difficulty settings coming soon!"));
 highScoresButton.addEventListener("click", () => alert("High scores feature coming soon!"));
+
+// Hide game elements initially
+document.getElementById("gameStatus").style.display = "none";
+pauseButton.style.display = "none";

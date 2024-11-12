@@ -5,36 +5,65 @@ const finalScoreElement = document.getElementById("finalScore");
 const retryButton = document.getElementById("retryButton");
 const pauseButton = document.getElementById("pauseButton");
 
+const introScreen = document.getElementById("introScreen");
+const newGameButton = document.getElementById("newGameButton");
+const difficultyButton = document.getElementById("difficultyButton");
+const highScoresButton = document.getElementById("highScoresButton");
+
 let score = 0;
 let ballRadius = 20;
-let x = canvas.width / 2;
-let y = canvas.height - 30;
-let dx = 2;
-let dy = -2;
-
+let x, y, dx, dy;
 const giantWidth = 150;
 const giantHeight = 20;
-let giantX = (canvas.width - giantWidth) / 2;
+let giantX;
 
 let rightPressed = false;
 let leftPressed = false;
-
 let gameOver = false;
 let paused = false;
+let difficultyLevel = 1;
+
+const ballImage = new Image();
+ballImage.src = "cat.png";
+const cryImage = new Image();
+cryImage.src = "catCry.png";
+const dieImage = new Image();
+dieImage.src = "dieCat.png";
+let currentBallImage = ballImage;
 
 let isMouseDown = false;
 let mouseX = 0;
 
-const ballImage = new Image();
-ballImage.src = "cat.png";
+function resetGameVariables() {
+    x = canvas.width / 2;
+    y = canvas.height - 30;
+    dx = 2;
+    dy = -2;
+    giantX = (canvas.width - giantWidth) / 2;
+    score = 0;
+    gameOver = false;
+    currentBallImage = ballImage;
+}
 
-const cryImage = new Image();
-cryImage.src = "catCry.png";
+function startGame() {
+    introScreen.style.display = "none";
+    canvas.style.display = "block";
+    resetGameVariables();
+    draw();
+}
 
-const dieImage = new Image();
-dieImage.src = "dieCat.png";
+function displayGameOver() {
+    gameOver = true;
+    currentBallImage = dieImage;
+    finalScoreElement.textContent = score;
+    gameOverMessage.style.display = "block";
+}
 
-let currentBallImage = ballImage;
+function restartGame() {
+    gameOverMessage.style.display = "none";
+    resetGameVariables();
+    draw();
+}
 
 function resizeCanvas() {
     canvas.width = window.innerWidth * 0.9;
@@ -51,10 +80,7 @@ canvas.addEventListener("mouseup", mouseUpHandler, false);
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 pauseButton.addEventListener("click", togglePause, false);
-
-retryButton.addEventListener("click", () => {
-    document.location.reload();
-});
+retryButton.addEventListener("click", restartGame, false);
 
 function mouseDownHandler(e) {
     if (e.button === 0) {
@@ -125,13 +151,6 @@ function updateScore() {
     document.getElementById("gameStatus").innerText = `Score: ${score}`;
 }
 
-function displayGameOver() {
-    gameOver = true;
-    currentBallImage = dieImage;
-    finalScoreElement.textContent = score;
-    gameOverMessage.style.display = "block";
-}
-
 function draw() {
     if (gameOver || paused) return;
 
@@ -144,7 +163,7 @@ function draw() {
         dx = -dx;
         currentBallImage = cryImage;
         setTimeout(() => {
-            currentBallImage = ballImage;
+            currentBallImage = gameOver ? dieImage : ballImage;
         }, 200);
     }
 
@@ -152,7 +171,7 @@ function draw() {
         dy = -dy;
         currentBallImage = cryImage;
         setTimeout(() => {
-            currentBallImage = ballImage;
+            currentBallImage = gameOver ? dieImage : ballImage;
         }, 200);
     } else if (y + dy > canvas.height - ballRadius) {
         if (x > giantX && x < giantX + giantWidth) {
@@ -176,4 +195,6 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
-draw();
+newGameButton.addEventListener("click", startGame);
+difficultyButton.addEventListener("click", () => alert("Difficulty settings coming soon!"));
+highScoresButton.addEventListener("click", () => alert("High scores feature coming soon!"));

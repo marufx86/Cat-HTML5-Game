@@ -1,5 +1,12 @@
 # Kawaii Cat Game
 
+<img width="763" height="485" alt="image" src="https://github.com/user-attachments/assets/2ea4dcdb-a07e-4ca3-9e54-cd7b8bee229a" />
+
+<img width="1666" height="1079" alt="image" src="https://github.com/user-attachments/assets/167f5e99-7538-4860-b84f-cfe0ed28de0c" />
+
+<img width="1663" height="1079" alt="image" src="https://github.com/user-attachments/assets/a6c6b241-519b-467f-b8f2-ff5e6f64b879" />
+
+
 Welcome to the Kawaii Cat HTML5 Game! A simple and cute arcade game built using HTML5 and JavaScript where you control a cat to catch falling objects and score points. The game is fully responsive and works well on both desktop and mobile devices.
 
 ## Features
